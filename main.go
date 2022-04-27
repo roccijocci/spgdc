@@ -10,7 +10,7 @@ import (
 
 type DiscipleshipClass struct {
 	Id              string    `json: "id"`
-	Date            time.Time `json: "date"`
+	Date            string    `json: "date"`
 	Topic           string    `json: "topic"`
 	Text            []string  `json: "text"`
 	MemoryVerse     []string  `json: "memoryVerse"`
@@ -36,15 +36,20 @@ func NewDCHandler(c *gin.Context) {
 		return
 	}
 	discipleshipClass.Id = xid.New().String()
-	discipleshipClass.Date = time.Date(2020, time.August, 10, 0, 0, 0, 0, time.Now().Local().Location())
+	//discipleshipClass.Date = time.Date(2020, time.August, 10, 0, 0, 0, 0, time.Now().Local().Location())
 	discipleshipClass.PublishedAt = time.Now()
 	discipleshipClasses = append(discipleshipClasses, discipleshipClass)
 	c.JSON(http.StatusOK, discipleshipClass)
 
 }
 
+func ListDCHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, discipleshipClasses)
+}
+
 func main() {
 	router := gin.Default()
 	router.POST("/dc", NewDCHandler)
+	router.GET("/dc", ListDCHandler)
 	router.Run()
 }
